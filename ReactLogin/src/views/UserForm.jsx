@@ -37,7 +37,7 @@ export default function UserForm() {
             axiosContext.put(`/users/${user.id}`, user)
                 .then(() => {
                     setNotification('User was successfully updated.')
-                    navigate('/users')
+                    navigator('/users')
                 })
                 .catch(err => {
                     const response = err.response;

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-export default function Dashboard() {
+function Dashboard() {
     const [startDate, setStartDate] = useState(new Date());
     return (
         <div>
@@ -9,3 +9,5 @@ export default function Dashboard() {
         </div>
     )
 }
+
+export default Dashboard;

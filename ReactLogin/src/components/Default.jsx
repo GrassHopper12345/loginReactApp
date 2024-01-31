@@ -1,7 +1,6 @@
 import { Link, Navigate, Outlet } from "react-router-dom";
-import { useStateContext } from "../context/ContextSource.js";
-import axiosContext from "../axios-context.js";
-import { useEffect } from "react";
+import { useStateContext } from "./context/ContextSource.js";
+import axiosContext from "./axios-context.js";
 import { useEffect } from "react";
 import Head from "./Head.jsx";
 

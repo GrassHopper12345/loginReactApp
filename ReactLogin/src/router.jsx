@@ -1,4 +1,4 @@
-import { creaeteBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dash from "./Dashboard.jsx";
 import Default from "./components/Default.jsx";
 import Guest from "./components/Guest.jsx";
@@ -8,7 +8,7 @@ import Signup from "./views/Signup.jsx";
 import UserForm from "./views/UserForm.jsx";
 import Users from "./views/Users.jsx";
 
-const router = creaeteBrowserRouter([
+const router = createBrowserRouter([
     {
         path: '/',
         element: <Default />,

@@ -1,7 +1,5 @@
 import { Link, Navigate, Outlet } from "react-router-dom";
-import { useStateContext } from "./context/ContextSource.js";
-import axiosContext from "./axios-context.js";
-import { useEffect } from "react";
+import { useStateContext } from "../context/ContextSource.jsx";
 import Head from "./Head.jsx";
 
 export default function Default() {
@@ -11,19 +9,9 @@ export default function Default() {
     }
     const onLogout = e => {
         e.preventDefault();
-
-        axiosContext.post('/logout')
-            .then(() => {
-                setUser({})
-                setToken(null)
-            })
+        setUser({})
+        setToken(null)
     }
-    useEffect(() => {
-        axiosContext.get('/user')
-            .then(({ data }) => {
-                setUser(data)
-            })
-    }, [])
     return (
         <div id="defaultLayout">
             <div className="content">

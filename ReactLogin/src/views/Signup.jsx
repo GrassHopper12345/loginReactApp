@@ -61,26 +61,37 @@ export default function Signup() {
             setToken('local-token');
         }
     }
+
     return (
-        <div className="login-signup-form animated fadeInDown">
-            <div className="form">
-                <form onSubmit={onSubmit}>
-                    <h1 className="title">Signup</h1>
-                    {errors &&
-                        <div className="alert">
-                            {Object.keys(errors).map(key => (
-                                <p key={key}>{errors[key][0]}</p>
-                            ))}
-                        </div>
-                    }
-                    <input ref={nameRef} type="text" placeholder="Full Name" />
-                    <input ref={emailRef} type="email" placeholder="Email" />
-                    <input ref={passwordRef} type="password" placeholder="Password" />
-                    <input ref={passwordConfirmationRef} type="password" placeholder="Repeat Password Please!" />
-                    <button className="btn btn-block" >Sign-Up</button>
-                    <p className="message">Already Registerd?<Link to="/login">Please Sign-In!</Link></p>
-                </form>
-            </div>
+        <div className="login-signup-wrapper animated fadeInDown">
+            <form className="login-signup-form-container" onSubmit={onSubmit}>
+                <h1 className="title">Signup</h1>
+                {errors &&
+                    <div className="alert">
+                        {Object.keys(errors).map(key => (
+                            <p key={key}>{errors[key][0]}</p>
+                        ))}
+                    </div>
+                }
+                <div className="form-group">
+                    <input ref={nameRef} type="text" placeholder="Full Name" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <input ref={emailRef} type="email" placeholder="Email" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <input ref={passwordRef} type="password" placeholder="Password" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <input ref={passwordConfirmationRef} type="password" placeholder="Repeat Password Please!" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <button className="btn btn-block" type="submit">Sign-Up</button>
+                </div>
+                <div className="text-center">
+                    <p className="message">Already Registerd? <Link to="/login">Please Sign-In!</Link></p>
+                </div>
+            </form>
         </div>
     )
 }

@@ -5,6 +5,36 @@
   text-align: center;
 }
 
+/* Override root constraints for login/signup pages */
+#root > .row {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Remove root constraints when login/signup forms are present */
+body:has(.login-signup-wrapper) {
+  overflow: hidden;
+  display: block !important;
+  place-items: normal !important;
+}
+
+body:has(.login-signup-wrapper) #root,
+#root:has(.login-signup-wrapper) {
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+body:has(.login-signup-wrapper) #root > .row,
+#root:has(.login-signup-wrapper) > .row {
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,4 +69,133 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Login and Signup Form Styling */
+/* Ensure the container div takes full viewport for centering on login/signup pages */
+.login-signup-wrapper {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1000 !important;
+  background-color: #f5f5f5;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Additional overrides for Bootstrap row class */
+body:has(.login-signup-wrapper) #root > .row,
+#root:has(.login-signup-wrapper) > .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.login-signup-form-container {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 400px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.login-signup-form-container .title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 2rem;
+}
+
+.login-signup-form-container .form-group {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.login-signup-form-container .form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.login-signup-form-container .form-control:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+}
+
+.login-signup-form-container .btn {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.login-signup-form-container .btn-primary {
+  background-color: #646cff;
+  color: white;
+}
+
+.login-signup-form-container .btn-primary:hover {
+  background-color: #535bf2;
+}
+
+.login-signup-form-container .btn-block {
+  width: 100%;
+  background-color: #646cff;
+  color: white;
+}
+
+.login-signup-form-container .btn-block:hover {
+  background-color: #535bf2;
+}
+
+.login-signup-form-container .alert {
+  background-color: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.login-signup-form-container .message {
+  margin-top: 1rem;
+  color: #666;
+}
+
+.login-signup-form-container .message a {
+  color: #646cff;
+  text-decoration: none;
+}
+
+.login-signup-form-container .message a:hover {
+  text-decoration: underline;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

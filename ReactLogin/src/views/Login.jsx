@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import axiosContext from "../axios-context.js";
 import { createRef } from "react";
 import { useStateContext } from "../context/ContextSource.jsx";
 import { useState } from "react";
@@ -14,31 +13,27 @@ export default function Login() {
 
     const emailRef = createRef()
     const passwordRef = createRef()
-    const { setUser, setToken } = useStateContext()
+    const { setUser, setToken, authenticateUser } = useStateContext()
     const [message, setMessage] = useState(null)
 
     const onSubmit = e => {
         e.preventDefault();
 
-        const payload = {
-            email: emailRef.current.value,
-            password: passwordRef.current.value,
+        const email = emailRef.current.value;
+        const password = passwordRef.current.value;
+
+        const user = authenticateUser(email, password);
+        
+        if (user) {
+            setUser(user);
+            setToken('local-token'); // Simple token for localStorage-based auth
+        } else {
+            setMessage('Invalid email or password');
         }
-        axiosContext.post('/login', payload)
-            .then(({ data }) => {
-                setUser(data.user)
-                setToken(data.token);
-            })
-            .catch((err) => {
-                const response = err.response;
-                if (response && response.status === 422) {
-                    setMessage(response.data.message);
-                }
-            })
     }
 
     return (
-        <div className="animated fadeInDown" style={LoginSignupForm}>
+        <div className="container animated fadeInDown" style={LoginSignupForm}>
             <form className="row g-3" onSubmit={onSubmit}>
                 {message &&
                     <div className="alert">

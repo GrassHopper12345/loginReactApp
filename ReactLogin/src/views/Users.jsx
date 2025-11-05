@@ -1,37 +1,33 @@
 import { useEffect, useState } from "react";
-import axiosContext from "../axios-context.js";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../context/ContextSource.jsx";
 
 export default function Users() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { setNotification } = useStateContext();
+    const { setNotification, getUsers, deleteUser } = useStateContext();
 
     useEffect(() => {
-        getUsers();
+        getUsersData();
     }, [])
 
     const onDeleteClick = user => {
         if (!window.confirm('Are you sure you want to delete?')) {
             return
         }
-        axiosContext.delete(`/users/${user.id}`)
-            .then(() => {
-                setNotification('User successfully deleted.')
-                getUsers();
-            })
+        deleteUser(user.id);
+        setNotification('User successfully deleted.')
+        getUsersData();
     }
-    const getUsers = () => {
+    
+    const getUsersData = () => {
         setLoading(true);
-        axiosContext.get('/users')
-        .then(({data}) => {
+        // Simulate loading for better UX
+        setTimeout(() => {
+            const usersList = getUsers();
+            setUsers(usersList);
             setLoading(false);
-            setUsers(data.data);
-        })
-        .catch(() => {
-            setLoading(false);
-        })
+        }, 100);
     }
 
     return(

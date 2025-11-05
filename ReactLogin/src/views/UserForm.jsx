@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axiosContext from "../axios-context.js";
 import { useStateContext } from "../context/ContextSource.jsx";
 
 export default function UserForm() {
@@ -15,37 +14,65 @@ export default function UserForm() {
     })
     const [errors, setErrors] = useState(null)
     const [loading, setLoading] = useState(false)
-    const { setNotification } = useStateContext()
+    const { setNotification, saveUser, getUserByEmail, getUserById } = useStateContext()
 
-    if (id) {
-        useEffect(() => {
+    useEffect(() => {
+        if (id) {
             setLoading(true)
-            axiosContext.get(`/users/${id}`)
-                .then(({ data }) => {
-                    setLoading(false)
-                    setUser(data)
+            // Find user by id
+            const foundUser = getUserById(id);
+            if (foundUser) {
+                setUser({
+                    id: foundUser.id,
+                    name: foundUser.name || '',
+                    email: foundUser.email || '',
+                    password: '',
+                    password_confirmation: '',
                 })
-                .catch(() => {
-                    setLoading(false)
-                })
-        }, [])
-    }
+            }
+            setLoading(false)
+        }
+    }, [id])
 
     const onSubmit = e => {
         e.preventDefault();
-        if (user.id) {
-            axiosContext.put(`/users/${user.id}`, user)
-                .then(() => {
-                    setNotification('User was successfully updated.')
-                    navigator('/users')
-                })
-                .catch(err => {
-                    const response = err.response;
-                    if (response && response.status === 422) {
-                        setErrors(response.data.errors)
-                    }
-                });
+        
+        // Basic validation
+        const validationErrors = {};
+        
+        if (!user.name) {
+            validationErrors.name = ['Name is required'];
         }
+        if (!user.email) {
+            validationErrors.email = ['Email is required'];
+        }
+        
+        // Check if email already exists (for new users or if email changed)
+        if (user.email) {
+            const existingUser = getUserByEmail(user.email);
+            if (existingUser && existingUser.id !== user.id) {
+                validationErrors.email = ['Email already exists'];
+            }
+        }
+        
+        // Password validation
+        if (!user.id && !user.password) {
+            // New users must provide a password
+            validationErrors.password = ['Password is required'];
+        }
+        if (user.password && user.password !== user.password_confirmation) {
+            validationErrors.password_confirmation = ['Passwords do not match'];
+        }
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        // Save user
+        saveUser(user);
+        setNotification(user.id ? 'User was successfully updated.' : 'User was successfully created.')
+        navigator('/users')
     }
     return (
         <>

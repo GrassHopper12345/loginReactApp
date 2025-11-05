@@ -1,19 +1,35 @@
 import { Link } from "react-router-dom";
-import { createRef } from "react";
+import { useState, useRef } from "react";
 import { useStateContext } from "../context/ContextSource.jsx";
-import { useState } from "react";
+import { Card } from "primereact/card";
+import { InputText } from "primereact/inputtext";
+import { Password } from "primereact/password";
+import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
 
 export default function Login() {
-  const emailRef = createRef();
-  const passwordRef = createRef();
   const { setUser, setToken, authenticateUser } = useStateContext();
-  const [message, setMessage] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const toast = useRef(null);
+
+  const showError = (message) => {
+    toast.current.show({
+      severity: "error",
+      summary: "Error",
+      detail: message,
+      life: 3000,
+    });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
+    // Validation
+    if (!email || !password) {
+      showError("Please fill in all fields");
+      return;
+    }
 
     const user = authenticateUser(email, password);
 
@@ -21,54 +37,58 @@ export default function Login() {
       setUser(user);
       setToken("local-token"); // Simple token for localStorage-based auth
     } else {
-      setMessage("Invalid email or password");
+      showError("Invalid email or password");
     }
   };
 
+  const title = (
+    <div className="text-center">
+      <h2 className="m-0">Account Login</h2>
+    </div>
+  );
+
   return (
     <div className="login-signup-wrapper animated fadeInDown">
-      <card className="card login-signup-form-container" onSubmit={onSubmit}>
-        {message && (
-          <div className="alert">
-            <p>{message}</p>
+      <Toast ref={toast} />
+      <Card title={title} className="login-signup-form-container">
+        <form onSubmit={onSubmit}>
+          <div className="field mb-4">
+            <span className="p-input-icon-left w-full">
+              <i className="pi pi-envelope" />
+              <InputText
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="w-full"
+              />
+            </span>
           </div>
-        )}
-        <h1 className="title">Account Login</h1>
-        <div className="form-group">
-          <label className="visually-hidden" htmlFor="email">
-            Email
-          </label>
-          <input
-            ref={emailRef}
-            id="email"
-            placeholder="Email"
-            type="text"
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <label className="visually-hidden" htmlFor="password">
-            Password
-          </label>
-          <input
-            ref={passwordRef}
-            id="password"
-            placeholder="Password"
-            type="password"
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <button className="btn btn-primary" type="submit">
-            Confirm
-          </button>
-        </div>
-        <div className="text-center">
-          <p className="message">
-            Not Registered? <Link to="/signup">Create An Account</Link>
-          </p>
-        </div>
-      </card>
+          <div className="field mb-4">
+            <Password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full"
+              inputClassName="w-full"
+              toggleMask
+              feedback={false}
+            />
+          </div>
+          <div className="field mb-4">
+            <Button
+              label="Login"
+              icon="pi pi-sign-in"
+              type="submit"
+              className="w-full"
+            />
+          </div>
+          <div className="text-center">
+            <p className="m-0">
+              Not Registered? <Link to="/signup">Create An Account</Link>
+            </p>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }
